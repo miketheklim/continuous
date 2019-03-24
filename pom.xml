@@ -69,7 +69,7 @@
 				<version>1.0.2</version>
 				<configuration>
 					<to>
-						<image>gcr.io/beck-pl/test/java-jib-demo:${build.number}</image>
+						<image>gcr.io/fiery-iridium-235312/test/continuous:${build.number}</image>
 					</to>
 					<container>
 						<jvmFlags>
