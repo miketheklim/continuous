@@ -1,36 +1,45 @@
-workflows:
-  version: 2
-  build-deploy:
-    jobs:
-      - unit-test
-      - say-hello:
-          requires:
-            - unit-test
-
-version: 2
+version: 2 # CircleCi version
 jobs:
-  unit-test:
-    docker:
-      - image: circleci/openjdk:11-jdk
-    working_directory: ~/repo
+  build:
+    docker: # use the docker executor type; machine and macos executors are also supported
+      - image: circleci/node:4.8.2 # the primary container, where your job's commands are run
     steps:
-      - checkout
-      - run: mvn dependency:go-offline
-      - run:
-          name: Build and unit test
-          command: |
-            mvn test -B
-      - store_test_results:
-          path: target/surefire-reports
+      - checkout # check out the code in the project directory
+      - run: echo "hello world" # run the `echo` command
 
-
-  say-hello:
-    docker:
-      - image: circleci/openjdk:11-jdk-browsers
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - run:
-          name: Say Hello
-          command: |
-            echo Hello
+#workflows:
+#  version: 2
+#  build-deploy:
+#    jobs:
+#      - unit-test
+#      - say-hello:
+#          requires:
+#            - unit-test
+#
+#version: 2
+#jobs:
+#  unit-test:
+#    docker:
+#      - image: circleci/openjdk:11-jdk
+#    working_directory: ~/repo
+#    steps:
+#      - checkout
+#      - run: mvn dependency:go-offline
+#      - run:
+#          name: Build and unit test
+#          command: |
+#            mvn test -B
+#      - store_test_results:
+#          path: target/surefire-reports
+#
+#
+#  say-hello:
+#    docker:
+#      - image: circleci/openjdk:11-jdk-browsers
+#    working_directory: ~/repo
+#    steps:
+#      - checkout
+#      - run:
+#          name: Say Hello
+#          command: |
+#            echo Hello
