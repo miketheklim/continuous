@@ -1,45 +1,82 @@
-version: 2 # CircleCi version
-jobs:
-  build:
-    docker: # use the docker executor type; machine and macos executors are also supported
-      - image: circleci/node:4.8.2 # the primary container, where your job's commands are run
-    steps:
-      - checkout # check out the code in the project directory
-      - run: echo "hello world" # run the `echo` command
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - unit-test
+      - publish-docker:
+          requires:
+            - unit-test
+          filters:
+            branches:
+              only: master
 
-#workflows:
-#  version: 2
-#  build-deploy:
-#    jobs:
-#      - unit-test
-#      - say-hello:
-#          requires:
-#            - unit-test
-#
-#version: 2
-#jobs:
-#  unit-test:
-#    docker:
-#      - image: circleci/openjdk:11-jdk
-#    working_directory: ~/repo
-#    steps:
-#      - checkout
-#      - run: mvn dependency:go-offline
-#      - run:
-#          name: Build and unit test
-#          command: |
-#            mvn test -B
-#      - store_test_results:
-#          path: target/surefire-reports
-#
-#
-#  say-hello:
-#    docker:
-#      - image: circleci/openjdk:11-jdk-browsers
-#    working_directory: ~/repo
-#    steps:
-#      - checkout
-#      - run:
-#          name: Say Hello
-#          command: |
-#            echo Hello
+version: 2
+jobs:
+  unit-test:
+    docker:
+      - image: circleci/openjdk:11-jdk
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - continuous-{{ checksum "pom.xml" }}
+            - continuous
+      - run: mvn dependency:go-offline
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: continuous-{{ checksum "pom.xml" }}
+      - run:
+          name: Build and unit test
+          command: |
+            mvn test -B
+      - store_test_results:
+          path: target/surefire-reports
+
+
+  publish-docker:
+    docker:
+      - image: circleci/openjdk:11-jdk-browsers
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - continuous-{{ checksum "pom.xml" }}
+            - continuous
+      - run:
+          name: Login to docker repo
+          command: docker login -u _json_key -p "$GOOGLE_AUTH" https://gcr.io
+      - run:
+          name: Build image
+          command: |
+            mvn compile jib:build -DskipTests=true \
+              -Dbuild.number=${CIRCLE_BUILD_NUM} \
+              -Dcommit.hash=${CIRCLE_SHA1} \
+              -Dcircle.workflow.guid=${CIRCLE_WORKFLOW_ID} \
+              -Dbuild.user=${CIRCLE_PROJECT_USERNAME} \
+              -Dbuild.repo=${CIRCLE_PROJECT_REPONAME}
+      - run:
+          name: send echo when finish
+          command: |
+            echo finito
+
+
+#  Steps
+#  Steps are actions that need to be taken to perform your job. Steps are usually a collection of executable commands.
+#  For example, the checkout step checks out the source code for a job over SSH. Then, the run step executes
+#  the make test command using a non-login shell by default.
+
+#  JOBS
+#  Jobs are a collection of steps and each job must declare an executor that is either docker, machine, or macos.
+#  Machine includes a default image if not specified, for Docker and macOS, you must also declare an image.
+
+# CACHE
+  # A cache stores a file or directory of files such as dependencies or source code in object storage.
+  # Each job may contain special steps for caching dependencies from previous jobs to speed up the build.
+
+
+#  Workflows
+#  Workflows define a list of jobs and their run order. It is possible to run jobs in parallel, sequentially,
+#  on a schedule, or with a manual gate using an approval job.

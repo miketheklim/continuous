@@ -16,6 +16,15 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<!-- These values should be passed in at build time -->
+		<build.number>000</build.number>
+		<commit.hash>local-build</commit.hash>
+		<build.user>local-build</build.user>
+		<build.repo>local-build</build.repo>
+		<circle.workflow.guid>local-build</circle.workflow.guid>
+		<docker.image.prefix>gcr.io/continuous/test</docker.image.prefix>
 	</properties>
 
 	<dependencies>
@@ -39,11 +48,42 @@
 		</dependency>
 	</dependencies>
 
+	<!--<build>-->
+		<!--<plugins>-->
+			<!--<plugin>-->
+				<!--<groupId>org.springframework.boot</groupId>-->
+				<!--<artifactId>spring-boot-maven-plugin</artifactId>-->
+			<!--</plugin>-->
+		<!--</plugins>-->
+	<!--</build>-->
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>1.0.2</version>
+				<configuration>
+					<to>
+						<image>gcr.io/beck-pl/test/java-jib-demo:${build.number}</image>
+					</to>
+					<container>
+						<jvmFlags>
+							<jvmFlag>-Dbuild.number=${build.number}</jvmFlag>
+							<jvmFlag>-Dcommit.hash=${commit.hash}</jvmFlag>
+							<jvmFlag>-Dbuild.user=${build.user}</jvmFlag>
+							<jvmFlag>-Dbuild.repo=${build.repo}</jvmFlag>
+							<jvmFlag>-Dcircle.workflow.guid=${circle.workflow.guid}</jvmFlag>
+						</jvmFlags>
+						<ports>
+							<port>8080</port>
+						</ports>
+					</container>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
