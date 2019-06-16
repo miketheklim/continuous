@@ -6,9 +6,9 @@ workflows:
       - publish-docker:
           requires:
             - unit-test
-          filters:
-            branches:
-              only: master
+#          filters:
+#            branches:
+#              only: master
 
 version: 2
 jobs:
@@ -30,9 +30,10 @@ jobs:
       - run:
           name: Build and unit test
           command: |
-            mvn test -B
-      - store_test_results:
-          path: target/surefire-reports
+            mvn test
+#            mvn test -B
+#      - store_test_results:
+#          path: target/surefire-reports
 
 
   publish-docker:
@@ -60,4 +61,4 @@ jobs:
       - run:
           name: send echo when finish
           command: |
-            echo jabadabaduuu!!!
+            echo finito 6
