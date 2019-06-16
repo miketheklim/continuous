@@ -19,7 +19,7 @@ jobs:
       - run:
           name: Build and unit test
           command: |
-            mvn test -B
+            mvn test
 #      - store_test_results:
 #          path: target/surefire-reports
 
