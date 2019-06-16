@@ -23,7 +23,7 @@
 		<!--<commit.hash>local-build</commit.hash>-->
 		<!--<build.user>local-build</build.user>-->
 		<!--<build.repo>local-build</build.repo>-->
-		<circle.workflow.guid>local-build</circle.workflow.guid>
+		<!--<circle.workflow.guid>local-build</circle.workflow.guid>-->
 		<docker.image.prefix>gcr.io/continuous/test</docker.image.prefix>
 	</properties>
 
@@ -77,7 +77,7 @@
 							<!--<jvmFlag>-Dcommit.hash=${commit.hash}</jvmFlag>-->
 							<!--<jvmFlag>-Dbuild.user=${build.user}</jvmFlag>-->
 							<!--<jvmFlag>-Dbuild.repo=${build.repo}</jvmFlag>-->
-							<jvmFlag>-Dcircle.workflow.guid=${circle.workflow.guid}</jvmFlag>
+							<!--<jvmFlag>-Dcircle.workflow.guid=${circle.workflow.guid}</jvmFlag>-->
 						</jvmFlags>
 						<ports>
 							<port>8080</port>
