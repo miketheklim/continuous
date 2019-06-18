@@ -46,7 +46,7 @@ jobs:
           command: |
             mvn compile jib:build -DskipTests=true \
               -Dbuild.number=${CIRCLE_BUILD_NUM} \
-      - run:
-          name: send echo when finish
-          command: |
-          echo finito 6
+#      - run:
+#          name: send echo when finish
+#          command: |
+#          echo finito 6
