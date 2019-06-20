@@ -97,7 +97,7 @@ jobs:
           name: Deploy to Kubernetes
           command: |
             envsubst < ${HOME}/project/k8s.yml > ${HOME}/patched_k8s.yml
-            kubectl set image deployments/continuous-deployment continuous-deployment=gcr.io/fiery-iridium-235312/test/continuous:$(( ${CIRCLE_BUILD_NUM}-1 ))
+            kubectl set image deployments/continuous-deployment continuous=gcr.io/fiery-iridium-235312/test/continuous:$(( ${CIRCLE_BUILD_NUM}-1 ))
 
 
 #            kubectl apply -f ${HOME}/patched_k8s.yml
