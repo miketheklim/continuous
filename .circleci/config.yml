@@ -61,7 +61,7 @@ jobs:
     environment:
       - PROJECT_NAME: "thursday"
       - GOOGLE_PROJECT_ID: "fiery-iridium-235312"
-      - GOOGLE_COMPUTE_ZONE: "europe-north1-a"
+      - GOOGLE_COMPUTE_ZONE: "us-central1-a"
       - GOOGLE_CLUSTER_NAME: "badbibi"
     steps:
       - checkout
