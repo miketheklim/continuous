@@ -6,8 +6,16 @@ workflows:
       - publish-docker:
           requires:
             - unit-test
+          filters:
+            branches:
+              only: master
+      - deploy-on-kubernetes:
+          requires:
+            - publish-docker
+
 version: 2
 jobs:
+
   unit-test:
     docker:
       - image: circleci/openjdk:11-jdk
@@ -46,6 +54,16 @@ jobs:
           command: |
             mvn compile jib:build -DskipTests=true \
               -Dbuild.number=${CIRCLE_BUILD_NUM}
+
+  deploy-on-kubernetes:
+    steps:
+      - run:
+          name: echo test
+          command: echo deploy success!
+
+
+
+
 #      - run:
 #          name: send echo when finish
 #          command: |
