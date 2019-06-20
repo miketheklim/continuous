@@ -97,8 +97,11 @@ jobs:
           name: Deploy to Kubernetes
           command: |
             envsubst < ${HOME}/project/k8s.yml > ${HOME}/patched_k8s.yml
-            kubectl apply -f ${HOME}/patched_k8s.yml
-            timeout 240 kubectl rollout status deployment/continuous || kubectl rollout undo deployment/continuous | exit 1
+            kubectl set image deployments/continuous-deployment continuous-deployment=gcr.io/fiery-iridium-235312/test/continuous:$(( ${CIRCLE_BUILD_NUM}-1 ))
+
+
+#            kubectl apply -f ${HOME}/patched_k8s.yml
+#            timeout 240 kubectl rollout status deployment/continuous-deplo || kubectl rollout undo deployment/continuous | exit 1
 
 
 
