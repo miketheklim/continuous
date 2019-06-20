@@ -92,9 +92,19 @@ jobs:
       - run:
           name: Deploy to Kubernetes
           command: |
-            envsubst < ${HOME}/project/k8s.yml > ${HOME}/patched_k8s.yml
             kubectl apply -f ${HOME}/patched_k8s.yml
-            timeout 240 kubectl rollout status deployment/continuous-deployment || kubectl rollout undo deployment/continuous-deployment | exit 1
+
+
+
+
+#            kubectl set image deployments/continuous countinuous=gcr.io/beck-pl/test/${PROJECT_NAME}:${CIRCLE_BUILD_NUM} --record=true
+#            envsubst < ${HOME}/project/k8s.yml > ${HOME}/patched_k8s.yml
+#            kubectl apply -f ${HOME}/patched_k8s.yml
+
+
+
+
+#            timeout 240 kubectl rollout status deployment/continuous-deployment || kubectl rollout undo deployment/continuous-deployment | exit 1
 
 
 
