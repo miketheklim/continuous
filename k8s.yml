@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: continuous-service
+  name: continuous
 spec:
   type: LoadBalancer
   selector:
@@ -14,7 +14,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: continuous-deployment
+  name: continuous
   labels:
     app: continuous
 spec:
@@ -32,3 +32,42 @@ spec:
           image: gcr.io/fiery-iridium-235312/test/continuous:$(( ${CIRCLE_BUILD_NUM}-1 ))
           ports:
             - containerPort: 8080
+
+
+
+
+
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: continuous-service
+#spec:
+#  type: LoadBalancer
+#  selector:
+#    app: continuous
+#  ports:
+#    - protocol: TCP
+#      port: 8080
+#      targetPort: 8080
+#---
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: continuous-deployment
+#  labels:
+#    app: continuous
+#spec:
+#  replicas: 3
+#  selector:
+#    matchLabels:
+#      app: continuous
+#  template:
+#    metadata:
+#      labels:
+#        app: continuous
+#    spec:
+#      containers:
+#        - name: continuous
+#          image: gcr.io/fiery-iridium-235312/test/continuous:$(( ${CIRCLE_BUILD_NUM}-1 ))
+#          ports:
+#            - containerPort: 8080
