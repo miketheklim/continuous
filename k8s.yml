@@ -29,6 +29,6 @@ spec:
     spec:
       containers:
         - name: continuous
-          image: gcr.io/fiery-iridium-235312/test/continuous:84
+          image: gcr.io/fiery-iridium-235312/test/continuous:${CIRCLE_SHA1}
           ports:
             - containerPort: 8080

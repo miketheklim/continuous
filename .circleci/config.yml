@@ -53,7 +53,11 @@ jobs:
           name: Build image
           command: |
             mvn compile jib:build -DskipTests=true \
-              -Dbuild.number=${CIRCLE_BUILD_NUM}
+              -Dbuild.number=${CIRCLE_BUILD_NUM} \
+              -Dcommit.hash=${CIRCLE_SHA1} \
+              -Dcircle.workflow.guid=${CIRCLE_WORKFLOW_ID} \
+              -Dbuild.user=${CIRCLE_PROJECT_USERNAME} \
+              -Dbuild.repo=${CIRCLE_PROJECT_REPONAME}
 
   deploy-on-kubernetes:
     docker:
@@ -90,7 +94,7 @@ jobs:
           command: |
             envsubst < ${HOME}/project/k8s.yml > ${HOME}/patched_k8s.yml
             kubectl apply -f ${HOME}/patched_k8s.yml
-            timeout 240 kubectl rollout status deployment/${PROJECT_NAME}
+            timeout 240 kubectl rollout status deployment/${PROJECT_NAME} || kubectl rollout undo deployment/${PROJECT_NAME} | exit 1
 
 
 
