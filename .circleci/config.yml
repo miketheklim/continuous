@@ -88,8 +88,8 @@ jobs:
       - run:
           name: Deploy to Kubernetes
           command: |
-            kubectl --record deployment.apps/${PROJECT_NAME} set image deployment.v1.apps/${PROJECT_NAME} ${PROJECT_NAME}=gcr.io/beck-pl/test/${PROJECT_NAME}:${CIRCLE_BUILD_NUM}
-            timeout 240 kubectl rollout status deployment.v1.apps/${PROJECT_NAME} || kubectl rollout undo deployment.v1.apps/${PROJECT_NAME} | exit 1
+            kubectl --record deployment/${PROJECT_NAME} set image deployment.v1.apps/${PROJECT_NAME} ${PROJECT_NAME}=gcr.io/beck-pl/test/${PROJECT_NAME}:${CIRCLE_BUILD_NUM}
+            timeout 240 kubectl rollout status deployment/${PROJECT_NAME} || kubectl rollout undo deployment.v1.apps/${PROJECT_NAME} | exit 1
 #            envsubst < ${HOME}/project/k8s.yml > ${HOME}/patched_k8s.yml
 #            kubectl apply -f ${HOME}/patched_k8s.yml
 #            kubectl rollout status deployment/${PROJECT_NAME}
