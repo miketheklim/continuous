@@ -47,8 +47,11 @@ jobs:
             - continuous-{{ checksum "pom.xml" }}
             - continuous
       - run:
-          name: Login to docker repo
-          command: docker login -u _json_key -p "$GCLOUD_SERVICE_KEY" https://gcr.io
+          name: Setup Google Cloud SDK
+          command: |
+            apt-get install -qq -y gettext
+            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+            gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
       - run:
           name: Build image
           command: |
