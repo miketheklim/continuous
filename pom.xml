@@ -69,7 +69,7 @@
 				<version>1.3.0</version>
 				<configuration>
 					<to>
-						<image>gcr.io/fiery-iridium-235312/test/continuous:${build.number}</image>
+						<image>gcr.io/fiery-iridium-235312/test/thursday:${build.number}</image>
 					</to>
 					<container>
 						<jvmFlags>

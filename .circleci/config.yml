@@ -56,15 +56,38 @@ jobs:
               -Dbuild.number=${CIRCLE_BUILD_NUM}
 
   deploy-on-kubernetes:
+    docker:
+      - image: google/cloud-sdk
+    environment:
+      - PROJECT_NAME: "thursday"
+      - GOOGLE_PROJECT_ID: "fiery-iridium-235312"
+      - GOOGLE_COMPUTE_ZONE: "europe-north1-a"
+      - GOOGLE_CLUSTER_NAME: "badbibi"
     steps:
+      - checkout
       - run:
-          name: echo test
-          command: echo deploy success!
-
-
-
-
+          name: Setup Google Cloud SDK
+          command: |
+            apt-get install -qq -y gettext
+            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+            gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+            gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
+#      - setup_remote_docker
 #      - run:
-#          name: send echo when finish
+#          name: Docker build and push
 #          command: |
-#          echo finito 6
+#            docker build \
+#              --build-arg COMMIT_REF=${CIRCLE_SHA1} \
+#              --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` \
+#              -t ${PROJECT_NAME} .
+#            docker tag ${PROJECT_NAME} eu.gcr.io/${GOOGLE_PROJECT_ID}/${PROJECT_NAME}:${CIRCLE_SHA1}
+#            gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://eu.gcr.io
+#            docker push eu.gcr.io/${GOOGLE_PROJECT_ID}/${PROJECT_NAME}:${CIRCLE_SHA1}
+      - run:
+          name: Deploy to Kubernetes
+          command: |
+            envsubst < ${HOME}/project/k8s.yml > ${HOME}/patched_k8s.yml
+            kubectl apply -f ${HOME}/patched_k8s.yml
+            kubectl rollout status deployment/${PROJECT_NAME}
