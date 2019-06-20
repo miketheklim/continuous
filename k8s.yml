@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: ${PROJECT_NAME}
-          image: eu.gcr.io/${GOOGLE_PROJECT_ID}/${PROJECT_NAME}:${CIRCLE_SHA1}
+          image: eu.gcr.io/${GOOGLE_PROJECT_ID}/test/${PROJECT_NAME}:${CIRCLE_BUILD_NUM}
           ports:
             - name: http
               containerPort: 8080
