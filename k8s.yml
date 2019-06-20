@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: continuous
-          image: gcr.io/fiery-iridium-235312/test/continuous:166
+          image: image: gcr.io/fiery-iridium-235312/test/continuous:$(( ${CIRCLE_BUILD_NUM}-1 ))
           ports:
             - name: http
               containerPort: 8080
