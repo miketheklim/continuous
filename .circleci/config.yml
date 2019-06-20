@@ -94,7 +94,7 @@ jobs:
           command: |
             envsubst < ${HOME}/project/k8s.yml > ${HOME}/patched_k8s.yml
             kubectl apply -f ${HOME}/patched_k8s.yml
-            timeout 240 kubectl rollout status deployment/${PROJECT_NAME} || kubectl rollout undo deployment/${PROJECT_NAME} | exit 1
+            timeout 240 kubectl rollout status deployment/continuous-deployment || kubectl rollout undo deployment/continuous-deployment | exit 1
 
 
 
