@@ -33,7 +33,7 @@ jobs:
       - run:
           name: Build and unit test
           command: |
-            mvn test
+            mvn test -DskipTests=true
 
   publish-docker:
     docker:
